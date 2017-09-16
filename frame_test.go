@@ -37,5 +37,5 @@ func TestFFProbe_Frames(t *testing.T) {
 	var f Frame
 	err := json.Unmarshal([]byte(mockedFrame), &f)
 	assert.NoError(t, err)
-	assert.Equal(t, Frame{BestEffortTimestamp: 126009, BestEffortTimestampTime: 1400100000, CodedPictureNumber: 4, Height: 1080, InterlacedFrame: true, KeyFrame: true, MediaType: "video", PictType: "I", PixFmt: "yuv420p", PktDuration: 3600, PktDurationTime: 40000000, PktDts: 126009, PktDtsTime: 1400100000, PktPos: 940, PktPts: 126009, PktPtsTime: 1400100000, PktSize: 72056, SampleAspectRatio: Ratio{Width: 1, Height: 1}, ToFieldFirst: true, Width: 1920}, f)
+	assert.Equal(t, Frame{BestEffortTimestamp: 126009, BestEffortTimestampTime: Duration{Duration: 1400100000}, CodedPictureNumber: 4, Height: 1080, InterlacedFrame: true, KeyFrame: true, MediaType: "video", PictType: "I", PixFmt: "yuv420p", PktDuration: 3600, PktDurationTime: Duration{Duration: 40000000}, PktDts: 126009, PktDtsTime: Duration{Duration: 1400100000}, PktPos: 940, PktPts: 126009, PktPtsTime: Duration{Duration: 1400100000}, PktSize: 72056, SampleAspectRatio: Ratio{Width: 1, Height: 1}, ToFieldFirst: true, Width: 1920}, f)
 }

@@ -10,6 +10,7 @@ import (
 // Output represents the object FFProbe outputs
 // https://ffmpeg.org/doxygen/2.7/structAVFrame.html
 type Output struct {
+	Format  Format   `json:"format"`
 	Frames  []Frame  `json:"frames"`
 	Streams []Stream `json:"streams"`
 }
