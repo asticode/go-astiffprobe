@@ -114,7 +114,7 @@ func (f *FFProbe) Streams(ctx context.Context, src string) (ss []Stream, err err
 	// Execute
 	var o Output
 	if o, err = f.exec(ctx, f.binaryPath, "-loglevel", "error", "-show_streams", "-print_format", "json", src); err != nil {
-		err = errors.Wrap(err, "executing failed")
+		err = errors.Wrap(err, "astiffprobe: executing failed")
 		return
 	}
 	return o.Streams, nil

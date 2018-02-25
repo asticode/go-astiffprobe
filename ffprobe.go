@@ -30,13 +30,13 @@ func (f *FFProbe) exec(ctx context.Context, args ...string) (o Output, err error
 
 	// Run cmd
 	if err = cmd.Run(); err != nil {
-		err = errors.Wrapf(err, "running %s failed with stderr %s", strings.Join(args, " "), bufErr.Bytes())
+		err = errors.Wrapf(err, "astiffprobe: running %s failed with stderr %s", strings.Join(args, " "), bufErr.Bytes())
 		return
 	}
 
 	// Unmarshal
 	if err = json.NewDecoder(bufOut).Decode(&o); err != nil {
-		err = errors.Wrapf(err, "unmarshaling %s failed", bufOut.Bytes())
+		err = errors.Wrapf(err, "astiffprobe: unmarshaling %s failed", bufOut.Bytes())
 		return
 	}
 	return

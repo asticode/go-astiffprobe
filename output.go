@@ -37,7 +37,7 @@ func (d *Division) UnmarshalText(b []byte) (err error) {
 	var p = strings.Split(string(b), "/")
 	var o float64
 	if len(p) == 0 {
-		err = fmt.Errorf("Invalid number of args for framerate %s", b)
+		err = fmt.Errorf("astiffprobe: invalid number of args for framerate %s", b)
 		return
 	} else if len(p) == 1 {
 		if o, err = strconv.ParseFloat(p[0], 64); err == nil {
@@ -71,7 +71,7 @@ func (d *Duration) UnmarshalText(b []byte) (err error) {
 	if f, err = strconv.ParseFloat(string(b), 64); err != nil {
 		return
 	}
-	*d = Duration{(time.Duration(f * 1e9))}
+	*d = Duration{time.Duration(f * 1e9)}
 	return
 }
 
@@ -97,7 +97,7 @@ type Ratio struct {
 func (r *Ratio) UnmarshalText(b []byte) (err error) {
 	var items = strings.Split(string(b), ":")
 	if len(items) < 2 {
-		return fmt.Errorf("Invalid ration %s", b)
+		return fmt.Errorf("astiffprobe: invalid ratio %s", b)
 	}
 	if r.Width, err = strconv.Atoi(items[0]); err != nil {
 		return

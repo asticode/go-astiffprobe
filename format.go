@@ -25,7 +25,7 @@ func (f *FFProbe) Format(ctx context.Context, src string) (ft Format, err error)
 	// Execute
 	var o Output
 	if o, err = f.exec(ctx, f.binaryPath, "-loglevel", "error", "-show_format", "-print_format", "json", src); err != nil {
-		err = errors.Wrap(err, "executing failed")
+		err = errors.Wrap(err, "astiffprobe: executing failed")
 		return
 	}
 	return o.Format, nil
