@@ -12,6 +12,7 @@ import (
 type Output struct {
 	Format  Format   `json:"format"`
 	Frames  []Frame  `json:"frames"`
+	Packets []Packet `json:"packets"`
 	Streams []Stream `json:"streams"`
 }
 

@@ -20,8 +20,7 @@ func New(c Configuration) *FFProbe {
 	return &FFProbe{binaryPath: c.BinaryPath}
 }
 
-// exec executes a cmd and returns the unmarshaled output
-func (f *FFProbe) exec(ctx context.Context, args ...string) (o Output, err error) {
+var execOutput = func(ctx context.Context, args ...string) (b *bytes.Buffer, err error) {
 	// Init
 	var cmd = exec.CommandContext(ctx, args[0], args[1:]...)
 	var bufOut, bufErr = &bytes.Buffer{}, &bytes.Buffer{}
@@ -33,10 +32,21 @@ func (f *FFProbe) exec(ctx context.Context, args ...string) (o Output, err error
 		err = errors.Wrapf(err, "astiffprobe: running %s failed with stderr %s", strings.Join(args, " "), bufErr.Bytes())
 		return
 	}
+	b = bufOut
+	return
+}
+
+func (f *FFProbe) exec(ctx context.Context, args ...string) (o Output, err error) {
+	// Get output
+	var b *bytes.Buffer
+	if b, err = execOutput(ctx, args...); err != nil {
+		err = errors.Wrap(err, "astiffprobe: getting output failed")
+		return
+	}
 
 	// Unmarshal
-	if err = json.NewDecoder(bufOut).Decode(&o); err != nil {
-		err = errors.Wrapf(err, "astiffprobe: unmarshaling %s failed", bufOut.Bytes())
+	if err = json.NewDecoder(b).Decode(&o); err != nil {
+		err = errors.Wrapf(err, "astiffprobe: unmarshaling %s failed", b.Bytes())
 		return
 	}
 	return
