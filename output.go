@@ -66,11 +66,6 @@ type Duration struct {
 	time.Duration
 }
 
-// NewDuration creates a new duration
-func NewDuration(d time.Duration) Duration {
-	return Duration{Duration: d}
-}
-
 // UnmarshalText implements the TextUnmarshaler interface
 func (d *Duration) UnmarshalText(b []byte) (err error) {
 	var f float64

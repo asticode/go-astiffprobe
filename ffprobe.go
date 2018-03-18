@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"os/exec"
-	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -13,34 +11,22 @@ import (
 // FFProbe represents an entity capable of running an FFProbe binary
 type FFProbe struct {
 	binaryPath string
+	executer   Executer
 }
 
 // New creates a new FFProbe
 func New(c Configuration) *FFProbe {
-	return &FFProbe{binaryPath: c.BinaryPath}
-}
-
-var execOutput = func(ctx context.Context, args ...string) (b *bytes.Buffer, err error) {
-	// Init
-	var cmd = exec.CommandContext(ctx, args[0], args[1:]...)
-	var bufOut, bufErr = &bytes.Buffer{}, &bytes.Buffer{}
-	cmd.Stdout = bufOut
-	cmd.Stderr = bufErr
-
-	// Run cmd
-	if err = cmd.Run(); err != nil {
-		err = errors.Wrapf(err, "astiffprobe: running %s failed with stderr %s", strings.Join(args, " "), bufErr.Bytes())
-		return
+	return &FFProbe{
+		binaryPath: c.BinaryPath,
+		executer:   executer{},
 	}
-	b = bufOut
-	return
 }
 
 func (f *FFProbe) exec(ctx context.Context, args ...string) (o Output, err error) {
 	// Get output
 	var b *bytes.Buffer
-	if b, err = execOutput(ctx, args...); err != nil {
-		err = errors.Wrap(err, "astiffprobe: getting output failed")
+	if b, err = f.executer.exec(ctx, args...); err != nil {
+		err = errors.Wrap(err, "astiffprobe: executing failed")
 		return
 	}
 
