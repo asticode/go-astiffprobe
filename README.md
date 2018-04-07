@@ -1,6 +1,4 @@
-# About
-
-TODO
+Use your FFProbe binary to gather quality information about your video files
 
 # Usage
 
@@ -21,4 +19,11 @@ streams, _ = f.Streams(context.Background(), <your input path>)
 // Retrieve frames
 var frames []astiffprobe.Frame
 frames, _ = f.Frames(context.Background(), <your input path>, <your stream index>)
+
+// Retrieve packets
+var packets []astiffprobe.Packet
+packets, _ = f.Packets(context.Background(), <your input path>, <your stream index>)
+
+// Retrieve packets ordered by PTS
+packets, _ = f.PacketsOrdered(context.Background(), <your input path>, <your stream index>)
 ```
