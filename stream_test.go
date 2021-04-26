@@ -1,11 +1,9 @@
 package astiffprobe
 
 import (
-	"testing"
-
 	"context"
-
-	"github.com/stretchr/testify/assert"
+	"reflect"
+	"testing"
 )
 
 var (
@@ -189,7 +187,13 @@ func TestFFProbe_Streams(t *testing.T) {
 	ss, err := f.Streams(context.Background(), "/src")
 
 	// Assert
-	assert.NoError(t, err)
-	assert.Equal(t, []Stream{stream1, stream2}, ss)
-	assert.Equal(t, []string{"/binary", "-loglevel", "error", "-show_streams", "-print_format", "json", "/src"}, e.args)
+	if err != nil {
+		t.Errorf("expected no error, got %s", err)
+	}
+	if ex := []Stream{stream1, stream2}; !reflect.DeepEqual(ex, ss) {
+		t.Errorf("expected %+v, got %+v", ex, ss)
+	}
+	if ex := []string{"/binary", "-loglevel", "error", "-show_streams", "-print_format", "json", "/src"}; !reflect.DeepEqual(ex, e.args) {
+		t.Errorf("expected %+v, got %+v", ex, e.args)
+	}
 }

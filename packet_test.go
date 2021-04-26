@@ -1,11 +1,9 @@
 package astiffprobe
 
 import (
-	"testing"
-
 	"context"
-
-	"github.com/stretchr/testify/assert"
+	"reflect"
+	"testing"
 )
 
 var (
@@ -65,9 +63,15 @@ func TestFFProbe_Packets(t *testing.T) {
 	ps, err := f.Packets(context.Background(), "/src", 1)
 
 	// Verify
-	assert.NoError(t, err)
-	assert.Equal(t, []Packet{packet1, packet2, packet3}, ps)
-	assert.Equal(t, []string{"/binary", "-loglevel", "error", "-show_packets", "-select_streams", "1", "-print_format", "json", "/src"}, e.args)
+	if err != nil {
+		t.Errorf("expected no error, got %s", err)
+	}
+	if ex := []Packet{packet1, packet2, packet3}; !reflect.DeepEqual(ex, ps) {
+		t.Errorf("expected %+v, got %+v", ex, ps)
+	}
+	if ex := []string{"/binary", "-loglevel", "error", "-show_packets", "-select_streams", "1", "-print_format", "json", "/src"}; !reflect.DeepEqual(ex, e.args) {
+		t.Errorf("expected %+v, got %+v", ex, e.args)
+	}
 }
 
 func TestFFProbe_PacketsOrdered(t *testing.T) {
@@ -78,7 +82,13 @@ func TestFFProbe_PacketsOrdered(t *testing.T) {
 	ps, err := f.PacketsOrdered(context.Background(), "/src", 1)
 
 	// Verify
-	assert.NoError(t, err)
-	assert.Equal(t, []Packet{packet2, packet3, packet1}, ps)
-	assert.Equal(t, []string{"/binary", "-loglevel", "error", "-show_packets", "-select_streams", "1", "-print_format", "json", "/src"}, e.args)
+	if err != nil {
+		t.Errorf("expected no error, got %s", err)
+	}
+	if ex := []Packet{packet2, packet3, packet1}; !reflect.DeepEqual(ex, ps) {
+		t.Errorf("expected %+v, got %+v", ex, ps)
+	}
+	if ex := []string{"/binary", "-loglevel", "error", "-show_packets", "-select_streams", "1", "-print_format", "json", "/src"}; !reflect.DeepEqual(ex, e.args) {
+		t.Errorf("expected %+v, got %+v", ex, e.args)
+	}
 }

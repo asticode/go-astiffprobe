@@ -1,11 +1,9 @@
 package astiffprobe
 
 import (
-	"testing"
-
 	"context"
-
-	"github.com/stretchr/testify/assert"
+	"reflect"
+	"testing"
 )
 
 var (
@@ -123,7 +121,13 @@ func TestFFProbe_Frames(t *testing.T) {
 	fs, err := f.Frames(context.Background(), "/src", 1)
 
 	// Assert
-	assert.NoError(t, err)
-	assert.Equal(t, []Frame{frame1, frame2}, fs)
-	assert.Equal(t, []string{"/binary", "-loglevel", "error", "-show_frames", "-select_streams", "1", "-print_format", "json", "/src"}, e.args)
+	if err != nil {
+		t.Errorf("expected no error, got %s", err)
+	}
+	if ex := []Frame{frame1, frame2}; !reflect.DeepEqual(ex, fs) {
+		t.Errorf("expected %+v, got %+v", ex, fs)
+	}
+	if ex := []string{"/binary", "-loglevel", "error", "-show_frames", "-select_streams", "1", "-print_format", "json", "/src"}; !reflect.DeepEqual(ex, e.args) {
+		t.Errorf("expected %+v, got %+v", ex, e.args)
+	}
 }

@@ -3,10 +3,9 @@ package astiffprobe
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"os/exec"
 	"strings"
-
-	"github.com/pkg/errors"
 )
 
 // Executer represents an executer
@@ -25,7 +24,7 @@ func (e executer) exec(ctx context.Context, args ...string) (b *bytes.Buffer, er
 
 	// Run cmd
 	if err = cmd.Run(); err != nil {
-		err = errors.Wrapf(err, "astiffprobe: running %s failed with stderr %s", strings.Join(args, " "), bufErr.Bytes())
+		err = fmt.Errorf("astiffprobe: running %s failed with stderr %s: %w", strings.Join(args, " "), bufErr.Bytes(), err)
 		return
 	}
 	b = bufOut

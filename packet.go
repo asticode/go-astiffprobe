@@ -2,11 +2,9 @@ package astiffprobe
 
 import (
 	"context"
-	"strconv"
-
+	"fmt"
 	"sort"
-
-	"github.com/pkg/errors"
+	"strconv"
 )
 
 // Packet represents a packet
@@ -29,7 +27,7 @@ func (f *FFProbe) Packets(ctx context.Context, src string, streamIndex int) (ps 
 	// Execute
 	var o Output
 	if o, err = f.exec(ctx, f.binaryPath, "-loglevel", "error", "-show_packets", "-select_streams", strconv.Itoa(streamIndex), "-print_format", "json", src); err != nil {
-		err = errors.Wrap(err, "astiffprobe: executing failed")
+		err = fmt.Errorf("astiffprobe: executing failed: %w", err)
 		return
 	}
 	return o.Packets, nil
@@ -40,7 +38,7 @@ func (f *FFProbe) PacketsOrdered(ctx context.Context, src string, streamIndex in
 	// Get packets
 	var unorderedPackets []Packet
 	if unorderedPackets, err = f.Packets(ctx, src, streamIndex); err != nil {
-		err = errors.Wrap(err, "astiffprobe: getting packets failed")
+		err = fmt.Errorf("astiffprobe: getting packets failed: %w", err)
 		return
 	}
 

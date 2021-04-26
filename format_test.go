@@ -1,11 +1,9 @@
 package astiffprobe
 
 import (
-	"testing"
-
 	"context"
-
-	"github.com/stretchr/testify/assert"
+	"reflect"
+	"testing"
 )
 
 var (
@@ -45,7 +43,13 @@ func TestFFProbe_Format(t *testing.T) {
 	fmt, err := f.Format(context.Background(), "/src")
 
 	// Assert
-	assert.NoError(t, err)
-	assert.Equal(t, format, fmt)
-	assert.Equal(t, []string{"/binary", "-loglevel", "error", "-show_format", "-print_format", "json", "/src"}, e.args)
+	if err != nil {
+		t.Errorf("expected no error, got %s", err)
+	}
+	if !reflect.DeepEqual(format, fmt) {
+		t.Errorf("expected %+v, got %+v", format, fmt)
+	}
+	if ex := []string{"/binary", "-loglevel", "error", "-show_format", "-print_format", "json", "/src"}; !reflect.DeepEqual(ex, e.args) {
+		t.Errorf("expected %+v, got %+v", ex, e.args)
+	}
 }
