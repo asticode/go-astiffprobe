@@ -109,7 +109,7 @@ var (
 		]
 	}`)
 	stream1 = Stream{
-		AvgFramerate:       Division(float64(1025) / float64(29)),
+		AvgFramerate:       newRational(1025, 29),
 		Bitrate:            5015020,
 		BitsPerRawSample:   8,
 		ChromaLocation:     "left",
@@ -125,7 +125,7 @@ var (
 		ColorRange:         "tv",
 		ColorSpace:         "bt709",
 		ColorTransfer:      "bt709",
-		DisplayAspectRatio: Ratio{Width: 16, Height: 9},
+		DisplayAspectRatio: newRational(16, 9),
 		Disposition: Disposition{
 			Default: true,
 		},
@@ -141,15 +141,15 @@ var (
 		PixFmt:            "yuv420p",
 		Profile:           "High",
 		Refs:              1,
-		RFrameRate:        50,
-		SampleAspectRatio: Ratio{Width: 1, Height: 1},
+		RFrameRate:        newRational(50, 1),
+		SampleAspectRatio: newRational(1, 1),
 		StartPts:          100980,
 		StartTime:         Duration{Duration: 1122000000},
-		Tags: Tags{
-			HandlerName: "VideoHandler",
-			Language:    "und",
+		Tags: map[string]string{
+			"handler_name": "VideoHandler",
+			"language":     "und",
 		},
-		TimeBase: Division(float64(1) / float64(90000)),
+		TimeBase: newRational(1, 90000),
 		Width:    1920,
 	}
 	stream2 = Stream{
@@ -171,11 +171,11 @@ var (
 		NbFrames:   417,
 		SampleFmt:  "s16p",
 		SampleRate: 48000,
-		Tags: Tags{
-			HandlerName: "SoundHandler",
-			Language:    "fre",
+		Tags: map[string]string{
+			"handler_name": "SoundHandler",
+			"language":     "fre",
 		},
-		TimeBase: Division(float64(1) / float64(48000)),
+		TimeBase: newRational(1, 48000),
 	}
 )
 

@@ -7,7 +7,7 @@ import (
 
 // Format represents a format
 type Format struct {
-	Bitrate          int      `json:"bit_rate,string"`
+	Bitrate          int64    `json:"bit_rate,string"`
 	Duration         Duration `json:"duration"`
 	Filename         string   `json:"filename"`
 	FormatName       string   `json:"format_name"`
@@ -15,7 +15,7 @@ type Format struct {
 	NumberOfPrograms int      `json:"nb_programs"`
 	NumberOfStreams  int      `json:"nb_streams"`
 	ProbeScore       int      `json:"probe_score"`
-	Size             int      `json:"size,string"`
+	Size             int64    `json:"size,string"`
 	StartTime        Duration `json:"start_time"`
 }
 

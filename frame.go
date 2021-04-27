@@ -32,12 +32,12 @@ type Frame struct {
 	PktPts     int      `json:"pkt_pts"`
 	PktPtsTime Duration `json:"pkt_pts_time"`
 	// size of the corresponding packet containing the compressed frame
-	PktSize           int   `json:"pkt_size,string"`
-	RepeatPict        Bool  `json:"repeat_pict"`
-	SampleAspectRatio Ratio `json:"sample_aspect_ratio"`
-	StreamIndex       int   `json:"stream_index"`
-	ToFieldFirst      Bool  `json:"top_field_first"`
-	Width             int   `json:"width"`
+	PktSize           int      `json:"pkt_size,string"`
+	RepeatPict        Bool     `json:"repeat_pict"`
+	SampleAspectRatio Rational `json:"sample_aspect_ratio"`
+	StreamIndex       int      `json:"stream_index"`
+	ToFieldFirst      Bool     `json:"top_field_first"`
+	Width             int      `json:"width"`
 }
 
 // Frames returns the frames of a stream

@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/asticode/go-astikit"
 )
 
 // Output represents the object FFProbe outputs
@@ -30,32 +32,42 @@ func (bl *Bool) UnmarshalJSON(b []byte) (err error) {
 	return
 }
 
-// Division represents a float in a division string format ("25/1")
-type Division float64
+// Rational represents a rational either in "25/1" or "16:9" format
+type Rational struct {
+	astikit.Rational
+}
+
+func newRational(num, den int) Rational {
+	return Rational{Rational: *astikit.NewRational(num, den)}
+}
 
 // UnmarshalText implements the TextUnmarshaler interface
-func (d *Division) UnmarshalText(b []byte) (err error) {
-	var p = strings.Split(string(b), "/")
-	var o float64
+func (r *Rational) UnmarshalText(b []byte) (err error) {
+	sep := "/"
+	if strings.Contains(string(b), ":") {
+		sep = ":"
+	}
+	var p = strings.Split(string(b), sep)
 	if len(p) == 0 {
-		err = fmt.Errorf("astiffprobe: invalid number of args for framerate %s", b)
+		err = fmt.Errorf("astiffprobe: invalid number of args for rational %s", b)
 		return
 	} else if len(p) == 1 {
-		if o, err = strconv.ParseFloat(p[0], 64); err == nil {
-			*d = Division(o)
+		var i int
+		if i, err = strconv.Atoi(p[0]); err == nil {
+			*r = newRational(i, 1)
 		}
 	} else {
-		var i1, i2 = float64(0), float64(0)
-		if i1, err = strconv.ParseFloat(p[0], 64); err != nil {
+		var i1, i2 int
+		if i1, err = strconv.Atoi(p[0]); err != nil {
 			return
 		}
-		if i2, err = strconv.ParseFloat(p[1], 64); err != nil {
+		if i2, err = strconv.Atoi(p[1]); err != nil {
 			return
 		}
 		if i1 == 0 || i2 == 0 {
-			*d = 0
+			*r = newRational(0, 0)
 		} else {
-			*d = Division(i1 / i2)
+			*r = newRational(i1, i2)
 		}
 	}
 	return
@@ -86,25 +98,5 @@ func (h *Hexadecimal) UnmarshalText(b []byte) (err error) {
 		return
 	}
 	*h = Hexadecimal(strconv.Itoa(int(n)))
-	return
-}
-
-// Ratio represents a ration in the format "16:9"
-type Ratio struct {
-	Height, Width int
-}
-
-// UnmarshalText implements the TextUnmarshaler interface
-func (r *Ratio) UnmarshalText(b []byte) (err error) {
-	var items = strings.Split(string(b), ":")
-	if len(items) < 2 {
-		return fmt.Errorf("astiffprobe: invalid ratio %s", b)
-	}
-	if r.Width, err = strconv.Atoi(items[0]); err != nil {
-		return
-	}
-	if r.Height, err = strconv.Atoi(items[1]); err != nil {
-		return
-	}
 	return
 }
